@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar</title>
+    <style>
+      img {
+        border-radius: 50%;
+        box-shadow: 0 0 15px #999;
+        /* width: 100px;  */
+        width: 100%;
+      }
+      picture {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        width: 100px;
+        margin: 5%;
+      }
+      img.disabled {
+        opacity: 0.3;
+      }
+      picture.is-small {
+        width: 20px;        
+      }
+      picture.is-large {
+        width: 150px;        
+      }
+      div {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+         Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-size: 24px;
+      }
+    </style>
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <!-- JSX -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body>
+    <h1>Avatar</h1>
+    <div id="app">
+<!--         <picture>
+            <img src="https://randomuser.me/api/portraits/men/20.jpg" alt="">
+            Jorge
+        </picture>
+        <picture>
+            <img src="https://randomuser.me/api/portraits/men/90.jpg" alt="">
+            Oliver
+        </picture> -->
+    </div>
+</body>
+<script type="text/babel">
+    const  r = React.createElement; // No hace falta con JSX
+    const $app = document.getElementById('app')
+    // useState
+    const useState = React.useState;
+    // const Avatar = params => {
+    // useState
+    // const Avatar = props => {
+    // Desestructuración, sacamos props.
+    const Avatar = ({id, name="Señor X", size}) => {
+      // const state = useState(true) 
+      // const enabled = state[0];
+      // const setEnabled = state[1];
+      // console.log(enabled)
+      const [ enabled, setEnabled ] = useState(true)
+      // Validación si no tiene id
+      // if(!id)return "Avatar incorrecto"
+      // if(!id) return <picture><img src="https://randomuser.me/api/portraits/lego/2.jpg"/>Señor X</picture>
+      console.log(enabled)
+      const imgClassName = enabled ? '' : 'disabled';
+      const src = `https://randomuser.me/api/portraits/men/${id}.jpg`;
+      // Size Avatar
+      // const pictureClassName = props.size == "small" ? "is-small" : ""
+      let pictureClassName = '';
+      if(size === "small") {
+        pictureClassName = "is-small"
+      } else if(size === "large"){
+        pictureClassName = "is-large"
+      }
+      // return r('img', { src })
+      // Con JSX
+      return(
+        // Renderizado Condicional
+        <picture className={pictureClassName}>
+          {
+            id ? (
+              <img onClick={() =>{
+                setEnabled(!enabled)
+              }}
+              className={imgClassName}
+              src= {src}/>
+            ) : (<div>Sin imagen</div>)
+          }
+          <strong>{enabled ? name : "Desactivado"}</strong>
+        </picture>
+      )
+      // return(
+      //   <picture className={pictureClassName}>
+      //     <img onClick={() =>{
+      //       setEnabled(!enabled)
+      //     }}
+      //     className={imgClassName}
+      //     src= {src}/>
+      //     <strong>{name}</strong>
+      //   </picture>
+      // )
+      // return (
+      //   <picture>
+      //     <img onClick={(event) => {
+      //       // alert(event.target)
+      //       console.log(event.target)
+      //       event.target.classList.toggle("disabled");
+      //       // useState
+      //     }} src= {src}/>
+      //     <strong>{props.name}</strong>
+      //   </picture>
+      // )
+    }
+    // Con un solo Avatar
+    //ReactDOM.render(r(Avatar,{ id: 3 }), $app)
+    // Con 2 Avatar
+    //ReactDOM.render(r('div', null, [r(Avatar,{ id: 3 }), r(Avatar,{ id: 9 })]), $app)
+    // Con JSX
+    // Agregar datos por defaults si no se especifican
+    // Avatar.defaultProps = {
+    //   name: "Willy"
+    // }
+    // Con JSX
+    //  PascalCase convencion para declara los componentes
+    // function contador () { // Diferenciar
+    //   return <button>Boton</button>
+    // }
+    // <React.Fragment> Se utiliza para renderizar varios elementos sin la necesidad que esten dentro de un div
+    function Contador () {
+      // let contadorState = useState(1);
+      const [contadorValue, contadorNewValue] = useState(1);
+      const [cantidad, cantidadNew] = useState(0);
+      // let contadorValue = contadorState[0];
+      // let contadorNewValue = contadorState[1];
+      return (
+        <div>
+          <span>{contadorValue}</span>
+          <button onClick={()=>{
+            contadorNewValue(contadorValue + 1)
+            cantidadNew(cantidad + 1)
+          }}>Incrementar +</button>
+          <button onClick={() => {
+            contadorNewValue(contadorValue - 1)
+            cantidadNew(cantidad + 1)
+          }}
+          >Decrementar -</button>
+          <p>Cantidad de veces utilizado: {cantidad}</p>
+        </div>
+      )
+    }
+    ReactDOM.render(
+      <div>
+        <Avatar id={5} name="Jorge" size="small"/>
+        <Avatar id={3} name="Oliver"/>
+        <Avatar id={11} name="Owen" size="large"/>
+        <Avatar id={13}/>
+        <Avatar name="Tobi"/>
+        <h3>Contador</h3>
+        <Contador/>
+      </div>,
+      $app
+    )
+    // Concepto de Componentes
+    // const $app = document.getElementById('app')
+    // const Avatar = params => {
+    //   const src = `https://randomuser.me/api/portraits/men/${params.id}.jpg`
+    //   return `
+    //   <picture>
+    //     <img src="${src}">
+    //     ${params.name}    
+    //   </picture>
+    //   `;
+    // }
+    // // $app.innerHTML += Avatar({ id: 20, name: "Jorge" });
+    // // $app.innerHTML += Avatar({ id: 90, name: "Oliver" });
+    // const avatarList = [
+    //     { id: 20, name: "Jorge" }, 
+    //     { id: 90, name: "Jorge" }
+    // ]
+    // avatarList.forEach (avatar => {
+    //     $app.innerHTML += Avatar({id: avatar.id, name: avatar.name})
+    // }) 
+    // $app.querySelectorAll('img').forEach( img => {
+    //   img.addEventListener('click', () => {
+    //     img.classList.toggle("disabled");
+    //   })
+    // })
+</script>
+</html>
